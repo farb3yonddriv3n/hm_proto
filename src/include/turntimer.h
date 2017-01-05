@@ -27,5 +27,6 @@ struct turntimer_s {
 void turntimer_free(struct turntimer_s *t);
 int turntimer_serialize(void *ao, char **dst, const char *maxdst);
 void turntimer_dump(struct turntimer_s *t);
+void *turntimer_deserialize(char **dst, const char *maxdst);
 
 #endif
