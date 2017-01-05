@@ -48,6 +48,10 @@ struct packet_meta_s {
     int (*free)(void *p);
 };
 
+#define parse_packet(m_p, m_buf, m_nbuf)\
+	char *ptrd##m_buf = m_buf;\
+	m_p = deserialize(&ptrd##m_buf, ptrd##m_buf + m_nbuf);
+
 #define build_packet(m_p, m_src, m_type, m_buffer)\
 	char m_buffer[8192];\
 	char *ptr##m_buffer;\
