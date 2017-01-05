@@ -22,6 +22,36 @@ void chooseoption_free(struct chooseoption_s *c)
     free(c);
 }
 
+int chooseoption_serialize(void *ao, char **dst, const char *maxdst)
+{
+	struct chooseoption_s *s;
+	char *start;
+
+	start = *dst;
+	s = ao;
+
+	write_byte(dst, maxdst, 8);
+	write_uint64(dst, maxdst, s->id);
+
+	write_byte(dst, maxdst, 16);
+	write_uint64(dst, maxdst, s->index);
+
+	write_byte(dst, maxdst, 24);
+	write_uint64(dst, maxdst, s->target);
+
+	if(s->suboption != 0) {
+		write_byte(dst, maxdst, 32);
+		write_uint64(dst, maxdst, s->suboption);
+	}
+
+	if(s->position != 0) {
+		write_byte(dst, maxdst, 40);
+		write_uint64(dst, maxdst, s->position);
+	}
+
+	return (*dst - start);
+}
+
 void *chooseoption_deserialize(char **dst, const char *maxdst)
 {
     int n;
