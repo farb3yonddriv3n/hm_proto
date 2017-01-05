@@ -23,8 +23,8 @@ typedef int (*f)(void *c);
 
 static struct packet_meta_s map_packet[MAP_PACKET_MAX] = {
     {P_GETGAMESTATE,    NULL,                       NULL,                       NULL},
-    {P_CHOOSEOPTION,    chooseoption_deserialize,   NULL,                       (f)chooseoption_free},
-    {P_TURNTIMER,       NULL,                       turntimer_serialize,        (f)turntimer_free},
+    {P_CHOOSEOPTION,    chooseoption_deserialize,   chooseoption_serialize,     (f)chooseoption_free},
+    {P_TURNTIMER,       turntimer_deserialize,      turntimer_serialize,        (f)turntimer_free},
     {P_CHOOSEENTITIES,  chooseentities_deserialize, NULL,                       (f)chooseentities_free},
     {P_ALLOPTIONS,      NULL,                       alloptions_serialize,       (f)alloptions_free},
     {P_ENTITYCHOICES,   NULL,                       entitychoices_serialize,    (f)entitychoices_free},
