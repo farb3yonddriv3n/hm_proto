@@ -63,6 +63,7 @@ void *handshake_deserialize(char **dst, const char *maxdst);
 void platform_free(struct platform_s *p);
 struct platform_s *platform_deserialize(char **dst, const char *maxdst);
 
+int chooseoption_serialize(void *ao, char **dst, const char *maxdst);
 void chooseoption_free(struct chooseoption_s *c);
 void *chooseoption_deserialize(char **dst, const char *maxdst);
 void chooseoption_dump(struct chooseoption_s *o, u64 local_held_card);
