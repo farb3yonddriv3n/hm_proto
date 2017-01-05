@@ -22,6 +22,35 @@ void turntimer_free(struct turntimer_s *t)
     free(t);
 }
 
+void *turntimer_deserialize(char **dst, const char *maxdst)
+{
+    int n;
+    struct turntimer_s *o;
+
+    o = malloc(sizeof(*o));
+    memset(o, 0, sizeof(*o));
+
+    n = read_byte(dst, maxdst);
+    if(n != 8) {
+        error();
+    }
+    o->seconds = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 16) {
+        error();
+    }
+    o->turn = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 24) {
+        error();
+    }
+    o->show = read_byte(dst, maxdst);
+
+    return o;
+}
+
 int turntimer_serialize(void *ao, char **dst, const char *maxdst)
 {
     struct turntimer_s *s;
