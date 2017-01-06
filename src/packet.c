@@ -28,10 +28,10 @@ static struct packet_meta_s map_packet[MAP_PACKET_MAX] = {
     {P_CHOOSEENTITIES,  chooseentities_deserialize, NULL,                       (f)chooseentities_free},
     {P_ALLOPTIONS,      NULL,                       alloptions_serialize,       (f)alloptions_free},
     {P_ENTITYCHOICES,   NULL,                       entitychoices_serialize,    (f)entitychoices_free},
-    {P_GAMESETUP,       NULL,                       gamesetup_serialize,        (f)gamesetup_free},
+    {P_GAMESETUP,       gamesetup_deserialize,      gamesetup_serialize,        (f)gamesetup_free},
     {P_USERUI,          userui_deserialize,         userui_serialize,           (f)userui_free},
     {P_POWERHISTORY,    powerhistory_deserialize,   powerhistory_serialize,     (f)powerhistory_free},
-    {P_HANDSHAKE,       handshake_deserialize,      NULL,                       (f)handshake_free},
+    {P_HANDSHAKE,       handshake_deserialize,      handshake_serialize,        (f)handshake_free},
     {P_PING,            NULL,                       NULL,                       NULL},
     {P_PONG,            NULL,                       NULL,                       NULL},
 };
