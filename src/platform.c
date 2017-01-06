@@ -24,6 +24,50 @@ void platform_free(struct platform_s *p)
     free(p);
 }
 
+int platform_size(struct platform_s *p)
+{
+    int num = 0;
+
+    num += 2;
+    num += sizeofu64(p->os);
+    num += sizeofu64(p->screen);
+
+    num += 1;
+    num += sizeofu32(p->nname) + p->nname;
+
+    if(p->store != 0) {
+        num += 1;
+        num += sizeofu64(p->store);
+    }
+
+    return num;
+}
+
+int platform_serialize(void *ao, char **dst, const char *maxdst)
+{
+    struct platform_s *s;
+    char *start;
+
+    start = *dst;
+    s = ao;
+
+    write_byte(dst, maxdst, 8);
+    write_uint64(dst, maxdst, s->os);
+
+    write_byte(dst, maxdst, 16);
+    write_uint64(dst, maxdst, s->screen);
+
+    write_byte(dst, maxdst, 26);
+    write_bytes(dst, maxdst, s->name, s->nname);
+
+    if(s->store != 0) {
+        write_byte(dst, maxdst, 32);
+        write_uint64(dst, maxdst, s->store);
+    }
+
+    return (*dst - start);
+}
+
 struct platform_s *platform_deserialize(char **dst, const char *maxdst)
 {
     int n;
