@@ -22,12 +22,6 @@ void gamesetup_free(struct gamesetup_s *g)
     free(g);
 }
 
-struct gamesetup_s *gamesetup_deserialize(char **dst, const char *maxdst)
-{
-    abort();
-    return NULL;
-}
-
 int gamesetup_serialize(void *data, char **dst, const char *maxdst)
 {
     char *start;
@@ -44,7 +38,6 @@ int gamesetup_serialize(void *data, char **dst, const char *maxdst)
     write_byte(dst, maxdst, 24);
     write_uint64(dst, maxdst, g->maxfriendlyminions);
 
-
     if(g->keepalive > 0) {
         write_byte(dst, maxdst, 32);
         write_uint64(dst, maxdst, g->keepalive);
@@ -56,6 +49,46 @@ int gamesetup_serialize(void *data, char **dst, const char *maxdst)
     }
 
     return (*dst - start);
+}
+
+void *gamesetup_deserialize(char **dst, const char *maxdst)
+{
+    int n;
+    struct gamesetup_s *o;
+
+    o = malloc(sizeof(*o));
+    memset(o, 0, sizeof(*o));
+
+    n = read_byte(dst, maxdst);
+    if(n != 8) {
+        error();
+    }
+    o->board = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 16) {
+        error();
+    }
+    o->maxsecrets = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 24) {
+        error();
+    }
+    o->maxfriendlyminions = read_uint64(dst, maxdst);
+
+    while(*dst < maxdst) {
+        n = read_byte(dst, maxdst);
+        if(n == 32) {
+            o->keepalive = read_uint64(dst, maxdst);
+        } else if(n == 40) {
+            o->stuckdisconnect = read_uint64(dst, maxdst);
+        } else {
+            error();
+        }
+    }
+
+    return o;
 }
 
 int gamesetup_size(struct gamesetup_s *g)
