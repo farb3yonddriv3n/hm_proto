@@ -27,6 +27,38 @@ void handshake_free(struct handshake_s *h)
     free(h);
 }
 
+int handshake_serialize(void *ao, char **dst, const char *maxdst)
+{
+    struct handshake_s *s;
+    char *start;
+
+    start = *dst;
+    s = ao;
+
+    write_byte(dst, maxdst, 8);
+    write_uint64(dst, maxdst, s->gamehandle);
+
+    write_byte(dst, maxdst, 18);
+    write_bytes(dst, maxdst, s->password, s->npassword);
+
+    write_byte(dst, maxdst, 24);
+    write_uint64(dst, maxdst, s->clienthandle);
+
+    if(s->mission != 0) {
+        write_byte(dst, maxdst, 32);
+        write_uint64(dst, maxdst, s->mission);
+    }
+
+    write_byte(dst, maxdst, 42);
+    write_bytes(dst, maxdst, s->version, s->nversion);
+
+    write_byte(dst, maxdst, 58);
+    write_uint(dst, maxdst, platform_size(s->platform));
+
+    platform_serialize(s->platform, dst, maxdst);
+    return (*dst - start);
+}
+
 void *handshake_deserialize(char **dst, const char *maxdst)
 {
     int n, len;
