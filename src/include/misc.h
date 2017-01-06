@@ -56,12 +56,16 @@ struct chooseoption_s {
 
 void gamesetup_free(struct gamesetup_s *g);
 int gamesetup_serialize(void *data, char **dst, const char *maxdst);
+void *gamesetup_deserialize(char **dst, const char *maxdst);
 
 void handshake_free(struct handshake_s *h);
 void *handshake_deserialize(char **dst, const char *maxdst);
+int handshake_serialize(void *ao, char **dst, const char *maxdst);
 
 void platform_free(struct platform_s *p);
 struct platform_s *platform_deserialize(char **dst, const char *maxdst);
+int platform_serialize(void *ao, char **dst, const char *maxdst);
+int platform_size(struct platform_s *p);
 
 int chooseoption_serialize(void *ao, char **dst, const char *maxdst);
 void chooseoption_free(struct chooseoption_s *c);
