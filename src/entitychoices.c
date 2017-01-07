@@ -26,6 +26,61 @@ void entitychoices_free(struct entitychoices_s *ec)
     free(ec);
 }
 
+void *entitychoices_deserialize(char **dst, const char *maxdst)
+{
+    int n, i;
+    struct entitychoices_s *o;
+    struct entitychoices_entities_s *e = e;
+
+    o = malloc(sizeof(*o));
+    memset(o, 0, sizeof(*o));
+
+    n = read_byte(dst, maxdst);
+    if(n != 8) {
+        error();
+    }
+    o->id = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 16) {
+        error();
+    }
+    o->type = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 32) {
+        error();
+    }
+    o->countmin = read_uint64(dst, maxdst);
+
+    n = read_byte(dst, maxdst);
+    if(n != 40) {
+        error();
+    }
+    o->countmax = read_uint64(dst, maxdst);
+
+    while(*dst < maxdst) {
+        n = read_byte(dst, maxdst);
+        if(n == 50) {
+            int n = read_uint(dst, maxdst);
+            for(i = 0; i < n; i++) {
+                e = malloc(sizeof(*e));
+                e->entity = read_uint64(dst, maxdst);
+                e->next = o->entities;
+                o->entities = e;
+            }
+        } else if(n == 56) {
+            o->source = read_uint64(dst, maxdst);
+        } else if(n == 64) {
+            o->player_id = read_uint64(dst, maxdst);
+        } else {
+            error();
+        }
+    }
+
+    return o;
+}
+
 int entitychoices_serialize(void *ep, char **dst, const char *maxdst)
 {
     int n = 0;

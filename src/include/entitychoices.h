@@ -38,5 +38,6 @@ struct entitychoices_s {
 void entitychoices_free(struct entitychoices_s *ec);
 int entitychoices_serialize(void *ep, char **dst, const char *maxdst);
 void entitychoices_dump(struct entitychoices_s *es);
+void *entitychoices_deserialize(char **dst, const char *maxdst);
 
 #endif
