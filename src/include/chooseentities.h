@@ -31,5 +31,6 @@ struct chooseentities_s {
 
 void chooseentities_free(struct chooseentities_s *c);
 void *chooseentities_deserialize(char **dst, const char *maxdst);
+int chooseentities_serialize(void *ao, char **dst, const char *maxdst);
 
 #endif

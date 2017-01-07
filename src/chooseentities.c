@@ -26,6 +26,28 @@ void chooseentities_free(struct chooseentities_s *c)
     free(c);
 }
 
+int chooseentities_serialize(void *ao, char **dst, const char *maxdst)
+{
+    struct chooseentities_s *s;
+    struct chooseentities_ent_s *e;
+    char *start;
+
+    start = *dst;
+    s = ao;
+
+    write_byte(dst, maxdst, 8);
+    write_uint64(dst, maxdst, s->id);
+
+    write_byte(dst, maxdst, 18);
+    write_uint64(dst, maxdst, s->nentity);
+
+    for(e = s->entity; e != NULL; e = e->next) {
+        write_uint(dst, maxdst, e->entity);
+    }
+
+    return (*dst - start);
+}
+
 void *chooseentities_deserialize(char **dst, const char *maxdst)
 {
     int n, i;
