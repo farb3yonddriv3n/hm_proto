@@ -146,5 +146,26 @@ int main()
         REPEAT;
     }
 
+    // userui
+    {
+        struct userui_s *c;
+        struct mouseinfo_s *e;
+        c = malloc(sizeof(*c));
+
+        e = malloc(sizeof(*e));
+        e->arroworigin = 0xffff;
+        e->heldcard = 0xffff;
+        e->overcard = 0xffff;
+        e->x = 0xffff;
+        e->y = 0xffff;
+
+        c->mouseinfo = e;
+        c->emote = 0xffff;
+        c->player_id = 0xffff;
+
+        build_packet(p, c, P_USERUI, buf);
+        REPEAT;
+    }
+
     return 0;
 }
